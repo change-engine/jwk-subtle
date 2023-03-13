@@ -1,4 +1,4 @@
-# jwt-subtle
+# jwk-subtle
 
 Verify RS256 JWT. Uses only `crypto.subtle`.
 
