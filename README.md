@@ -10,4 +10,3 @@ if (scheme !== "Bearer") new Response("", { status: 401 });
 const claims = await verify(token, "https://example.eu.auth0.com/", "http://example.com");
 if (!claims) return new Response("", { status: 401 });
 ```
->>>>>>> 9bda056 (init)
