@@ -5,6 +5,7 @@ function b64decode(b64: string): string {
 function toUint8Array(s: string): Uint8Array {
   return new Uint8Array([...s].map((ch) => ch.charCodeAt(0)));
 }
+
 export async function verify<T>(token: string, iss: string, aud: string): Promise<T | false> {
   const [_head, _claims, sig] = token.split('.');
   const head = JSON.parse(b64decode(_head)) as {
@@ -29,7 +30,7 @@ export async function verify<T>(token: string, iss: string, aud: string): Promis
       await crypto.subtle.importKey('jwk', key, { name: 'RSASSA-PKCS1-v1_5', hash: { name: 'SHA-256' } }, false, [
         'verify',
       ]),
-      toUint8Array(sig),
+      toUint8Array(b64decode(sig)),
       toUint8Array(`${_head}.${_claims}`),
     ))
   )
