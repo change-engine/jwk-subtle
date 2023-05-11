@@ -47,3 +47,25 @@ export async function verify<T>(token: string, iss: string, aud: string): Promis
   if (!claims.aud.includes(aud)) return false;
   return claims;
 }
+
+/// Hono middleware
+export const withJWK =
+  (issuer: string, audience: string) =>
+  async (
+    c: {
+      req: {
+        header(name: string): string | undefined;
+      };
+      body: (data: string, status: 401) => Response;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      set: (k: 'jwtPayload', v: any) => void;
+    },
+    next: () => Promise<void>,
+  ) => {
+    const [scheme, token] = (c.req.header('Authorization') ?? ' ').split(' ');
+    if (scheme !== 'token' && scheme !== 'Bearer') return c.body('', 401);
+    const claims = await verify(token, issuer, audience);
+    if (!claims) return c.body('', 401);
+    c.set('jwtPayload', claims);
+    await next();
+  };
