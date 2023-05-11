@@ -3,11 +3,11 @@
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint",
-    "prepare": "npm run build"
+    "prepack": "run build"
   },
   "type": "module",
   "name": "jwk-subtle",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Verify RS256 JWT. Uses only `crypto.subtle`.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
