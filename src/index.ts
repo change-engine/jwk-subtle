@@ -15,7 +15,11 @@ export async function verify<T>(token: string, iss: string, aud: string): Promis
   };
   if (head.typ !== 'JWT') return false;
   if (head.alg !== 'RS256') return false;
-  const jwksRequest = await fetch(`${iss}${iss.endsWith('/') ? '' : '/'}.well-known/jwks.json`);
+  const oidcRequest = await fetch(`${iss}${iss.endsWith('/') ? '' : '/'}.well-known/openid-configuration`);
+  const oidc = (await oidcRequest.json()) as {
+    jwks_uri: string;
+  };
+  const jwksRequest = await fetch(oidc.jwks_uri);
   const jwks = (await jwksRequest.json()) as {
     keys: (JsonWebKey & {
       kid: string;
