@@ -35,10 +35,10 @@
     ],
     "root": true
   },
+  "packageManager": "yarn@4.0.0",
   "prettier": {
     "printWidth": 120,
     "trailingComma": "all",
     "singleQuote": true
-  },
-  "packageManager": "yarn@3.5.0"
+  }
 }
