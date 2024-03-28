@@ -27,7 +27,7 @@ export async function verify<T>(token: string, iss: string, aud: string): Promis
   };
   const key = Object.fromEntries(jwks.keys.map((k) => [k.kid, k]))[head.kid];
   if (!key) return false;
-  if (key.alg !== 'RS256') return false;
+  if (key.alg && key.alg !== 'RS256') return false;
   if (
     !(await crypto.subtle.verify(
       { name: 'RSASSA-PKCS1-v1_5', hash: { name: 'SHA-256' } },
