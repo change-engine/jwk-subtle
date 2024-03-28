@@ -7,7 +7,7 @@
   },
   "type": "module",
   "name": "jwk-subtle",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Verify RS256 JWT. Uses only `crypto.subtle`.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
