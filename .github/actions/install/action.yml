@@ -1,18 +1,12 @@
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
-        node-version: "18"
+        node-version: "24"
 
     - run: corepack enable
       shell: bash
 
-    - run: yarn set version berry
-      shell: bash
-
-    - run: yarn config set nodeLinker node-modules
-      shell: bash
-
-    - run: yarn install --no-immutable
+    - run: pnpm install
       shell: bash

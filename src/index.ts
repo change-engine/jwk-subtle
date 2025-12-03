@@ -1,21 +1,23 @@
 function b64decode(b64: string): string {
-  return atob(b64.replace(/-/g, '+').replace(/_/g, '/'));
+  return atob(b64.replace(/-/g, "+").replace(/_/g, "/"));
 }
 
-function toUint8Array(s: string): Uint8Array {
+function toUint8Array(s: string): Uint8Array<ArrayBuffer> {
   return new Uint8Array([...s].map((ch) => ch.charCodeAt(0)));
 }
 
 export async function verify<T>(token: string, iss: string, aud: string): Promise<T | false> {
-  const [_head, _claims, sig] = token.split('.');
+  const [_head, _claims, sig] = token.split(".");
   const head = JSON.parse(b64decode(_head)) as {
     typ: string;
     alg: string;
     kid: string;
   };
-  if (head.typ !== 'JWT') return false;
-  if (head.alg !== 'RS256') return false;
-  const oidcRequest = await fetch(`${iss}${iss.endsWith('/') ? '' : '/'}.well-known/openid-configuration`);
+  if (head.typ !== "JWT") return false;
+  if (head.alg !== "RS256") return false;
+  const oidcRequest = await fetch(
+    `${iss}${iss.endsWith("/") ? "" : "/"}.well-known/openid-configuration`,
+  );
   const oidc = (await oidcRequest.json()) as {
     jwks_uri: string;
   };
@@ -27,13 +29,17 @@ export async function verify<T>(token: string, iss: string, aud: string): Promis
   };
   const key = Object.fromEntries(jwks.keys.map((k) => [k.kid, k]))[head.kid];
   if (!key) return false;
-  if (key.alg && key.alg !== 'RS256') return false;
+  if (key.alg && key.alg !== "RS256") return false;
   if (
     !(await crypto.subtle.verify(
-      { name: 'RSASSA-PKCS1-v1_5', hash: { name: 'SHA-256' } },
-      await crypto.subtle.importKey('jwk', key, { name: 'RSASSA-PKCS1-v1_5', hash: { name: 'SHA-256' } }, false, [
-        'verify',
-      ]),
+      { name: "RSASSA-PKCS1-v1_5", hash: { name: "SHA-256" } },
+      await crypto.subtle.importKey(
+        "jwk",
+        key,
+        { name: "RSASSA-PKCS1-v1_5", hash: { name: "SHA-256" } },
+        false,
+        ["verify"],
+      ),
       toUint8Array(b64decode(sig)),
       toUint8Array(`${_head}.${_claims}`),
     ))
@@ -62,14 +68,14 @@ export const withJWK =
       };
       body: (data: string, status: 401) => Response;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      set: (k: 'jwtPayload', v: any) => void;
+      set: (k: "jwtPayload", v: any) => void;
     },
     next: () => Promise<void>,
   ) => {
-    const [scheme, token] = (c.req.header('Authorization') ?? ' ').split(' ');
-    if (scheme !== 'token' && scheme !== 'Bearer') return c.body('', 401);
+    const [scheme, token] = (c.req.header("Authorization") ?? " ").split(" ");
+    if (scheme !== "token" && scheme !== "Bearer") return c.body("", 401);
     const claims = await verify(token, issuer, audience);
-    if (!claims) return c.body('', 401);
-    c.set('jwtPayload', claims);
+    if (!claims) return c.body("", 401);
+    c.set("jwtPayload", claims);
     await next();
   };
