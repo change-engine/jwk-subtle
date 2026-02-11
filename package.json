@@ -13,7 +13,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/change-engine/two-stroke"
+    "url": "https://github.com/change-engine/jwk-subtle"
   },
   "author": "ChangeEngine <engineering@changeengine.com>",
   "license": "MIT",
