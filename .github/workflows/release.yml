@@ -3,17 +3,15 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 permissions:
+  id-token: write
   contents: read
 
 defaults:
   run:
     shell: bash
-
-env:
-  NPM_AUTH_TOKEN: ''
 
 jobs:
   ci:
@@ -24,5 +22,3 @@ jobs:
       - uses: ./.github/actions/install
 
       - run: pnpm publish --no-git-checks
-        env:
-          "npm_config_//registry.npmjs.org/:_authToken": ${{ secrets.NPM_AUTH_TOKEN }}
