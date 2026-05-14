@@ -24,7 +24,7 @@
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "eslint": "^10.2.1",
-    "eslint-config-two-stroke": "^1.4.5",
+    "eslint-config-two-stroke": "^1.5.3",
     "prettier": "^3.8.1",
     "typescript": "^6.0.3"
   },
